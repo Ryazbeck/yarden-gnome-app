@@ -29,10 +29,10 @@ const schema = {
           return key.split("/").join("-") + ":post_data";
         },
         // Can be async function !
-        vote_counts: async (faker, key) => {
-          const result = await doSomethingAsync();
-          return result;
-        },
+        // vote_counts: async (faker, key) => {
+        //   const result = await doSomethingAsync();
+        //   return result;
+        // },
         author_id: "{userID}",
         created_at: "timestamp"
       }

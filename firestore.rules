@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /zones/{zone} {
+      allow read, write, update: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid != null;
+      match /notes/{note} {
+      	// Confirm the parent zone's userId matches the request.
+      	allow read, write, update, create: if get(/databases/$(database)/documents/zones/$(zone)).data.userId == request.auth.uid;
+      }
+    }
+  }
+}

@@ -1,11 +1,16 @@
 <script>
   import { FirebaseApp, User, Doc, Collection } from "sveltefire";
+  import Zones from "./Zones.svelte"
 
   import firebase from "firebase/app";
-  import "firebase/firestore";
   import "firebase/auth";
+  import "firebase/firestore";
   import "firebase/performance";
   import "firebase/analytics";
+  // import "firebase/messaging";
+  // import "firebase/storage";
+
+  import Tailwindcss from './Tailwindcss.svelte';
 
   let firebaseConfig = {
     apiKey: "AIzaSyCzha0sFqdty4ildyFuyR4qVCY4kjRel_w",
@@ -19,6 +24,36 @@
   };
 
   firebase.initializeApp(firebaseConfig);
+
+  let userId;
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+  function authPopup() {
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      userId = result.user;
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
+
+  function authSignOut() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
 </script>
 
 <main>
@@ -35,100 +70,44 @@
   <!-- 1. 🔥 Firebase App -->
   <FirebaseApp {firebase}>
 
-    <h1>💪🔥 Mode Activated</h1>
-
-    <p>
-      <strong>Tip:</strong>
-      Open the browser console for development logging.
-    </p>
-
-
     <!-- 2. 😀 Get the current user -->
     <User let:user let:auth>
-      Howdy 😀! User
-      <em>{user.uid}</em>
+      <div class="flex justify-between p-4 bg-green-400">
+        <span class="text-2xl font-bold text-white">
+          Smart Gardening
+        </span>
+        <span class="flex justify-end">
+          <span class="flex items-center text-sm font-semibold text-gray-100">{user.email}</span>
+          <button class="p-1 ml-3 font-semibold text-gray-100 border-2 border-gray-100 shadow-sm hover:bg-red-400" on:click={() => authSignOut()}>Sign Out</button>
+        </span>
+      </div>
 
-      <button on:click={() => auth.signOut()}>Sign Out</button>
+      <Zones {user} />
+
+      <span slot="loading">Loading zones...</span>
 
       <div slot="signed-out">
-
-        <button on:click={() => auth.signInAnonymously()}>
-          Sign In Anonymously
+        <button class="h-full p-2 font-semibold text-white bg-green-400 hover:bg-green-500" on:click={() => authPopup()}>
+          Sign In With Google
         </button>
       </div>
 
-      <hr />
-
-      <!-- 3. 📜 Get a Firestore document owned by a user -->
-      <Doc path={`posts/${user.uid}`} let:data={post} let:ref={postRef} log>
-
-        <h2>{post.title}</h2>
-
-        <p>
-          Document
-          created at <em>{new Date(post.createdAt).toLocaleString()}</em>
-        </p>
-
-        <span slot="loading">Loading post...</span>
-        <span slot="fallback">
-          <button
-            on:click={() => postRef.set({
-                title: '📜 I like Svelte',
-                createdAt: Date.now()
-              })}>
-            Create Document
-          </button>
-        </span>
-
-        <!-- 4. 💬 Get all the comments in its subcollection -->
-
-        <h3>Comments</h3>
-        <Collection
-          path={postRef.collection('comments')}
-          query={ref => ref.orderBy('createdAt')}
-          let:data={comments}
-          let:ref={commentsRef}
-          log>
-
-          {#if !comments.length}
-              No comments yet...
-          {/if}
-
-          {#each comments as comment}
-            <p>
-              <!-- ID: <em>{comment.ref.id}</em> -->
-            </p>
-            <p>
-              {comment.text}
-              <button on:click={() => comment.ref.delete()}>Delete</button>
-            </p>
-          {/each}
-
-
-          <button
-            on:click={() => commentsRef.add({
-                text: '💬 Me too!',
-                createdAt: Date.now()
-              })}>
-            Add Comment
-          </button>
-
-          <span slot="loading">Loading comments...</span>
-
-        </Collection>
-      </Doc>
     </User>
   </FirebaseApp>
 
+  <Tailwindcss />
 </main>
 
 
 <!-- Styles -->
 <style>
+  * {
+    transition: .2s;
+  }
+  
   main {
     text-align: center;
-    padding: 1em;
-    max-width: 240px;
+    padding: 0;
     margin: 0 auto;
   }
 
@@ -145,7 +124,7 @@
 
   @media (min-width: 640px) {
     main {
-      max-width: none;
+      /* max-width: none; */
     }
   }
 </style>
