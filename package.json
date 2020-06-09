@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "firebase-tools": "^8.4.2",
+    "moment": "^2.26.0",
     "svelte-icons": "^2.1.0"
   }
 }

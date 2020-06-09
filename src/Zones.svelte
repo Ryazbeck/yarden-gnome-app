@@ -1,5 +1,5 @@
 <script>
-  import { Doc, Collection } from "sveltefire";
+  import { Collection } from "sveltefire";
   import Zone from "./Zone.svelte";
 
   export let user;

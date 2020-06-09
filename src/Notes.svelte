@@ -1,25 +1,43 @@
 <script>
-  import { Doc } from "sveltefire";
-  import IoIosAdd from 'svelte-icons/io/IoIosAdd.svelte'
+  import { Collection } from "sveltefire";
+  import Note from "./Note.svelte";
 
   export let zone;
-  let zoneNameUpdate;
-  let editName = false;
-  let notes = zone.ref.collection("notes").get()
-  console.log(notes)
-
-  let zoneDescriptionUpdate;
-  let editDescription = false;
 </script>
 
-<div>
-  <div>
-    <h3>Notes</h3>
+<span class="w-1/2 text-sm border-green-400 rounded-sm">
+  <div class="flex flex-row justify-start justify-between w-auto mb-1 align-middle rounded-sm">
+    <div class="w-1/6 p-1 font-semibold">
+      Notes
+    </div>
+    <div class="w-20 p-1 font-semibold text-white bg-blue-400 rounded-sm cursor-pointer hover:bg-blue-500">
+      Add Note
+    </div>
   </div>
+
   <div>
-    <!-- <span on:click={() => editName=true} class="ml-2 cursor-pointer icon"> -->
+    <Collection
+      path={`${zone.ref.path}/notes`}
+      query={ref => ref.orderBy('created', 'desc')}
+      let:data={notes}
+      let:ref={notesRef}
+      log>
+
+      {#each notes as note}
+        <Note {note} />
+      {/each}
+
+    </Collection>
+  </div>
+  <!-- <span class="ml-1 cursor-pointer icon">
+    <span on:click={() => editName=true} >
     <IoIosAdd />
-    Add Note 
-  </div>
-  {console.log(zone)}
-</div>
+  </span> -->
+</span>
+
+
+<style>
+  * {
+    transition: .2s;
+  }
+</style>
