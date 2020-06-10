@@ -9,20 +9,25 @@
   let expandNote = false;
 </script>
 
-
-<div class="note-container flex flex-row w-full h-16 mb-3 text-left bg-white border-t-2 border-green-300 rounded-sm cursor-pointer {expandNote ? 'expanded' : 'hover:bg-green-100'}">
-  <div class="w-1/12 h-full p-1 pt-3 mx-1">
-    <span class="icon">
-      <MdAssignment />
-    </span>
-  </div>
-
-  <div class="flex flex-col justify-between w-11/12 h-full pt-2 note" on:click={() => expandNote = expandNote ? false : true}>
-    <div class="h-4 mb-1 text-xs text-gray-600">
-      {moment(note.created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
+<div class="w-full h-30 note-container">
+  <div class="flex flex-row w-full h-16 mb-3 text-left bg-gray-100 border-l-2 border-green-300 rounded-sm cursor-pointer {expandNote ? 'expanded' : 'hover:bg-green-100'}">
+    <div class="w-1/12 h-full p-1 pt-3 mx-1">
+      <span class="icon">
+        <MdAssignment />
+      </span>
     </div>
-    <div class="relative z-0 h-full pr-4 overflow-hidden text-sm leading-4 {expandNote ? 'expanded-note' : ''}">
-      {note.note}
+
+    <div class="flex flex-col justify-between w-11/12 h-full pt-2 note" on:click={() => expandNote = expandNote ? false : true}>
+      <div class="h-4 mb-1 text-xs text-gray-600">
+        {#if note.created}
+          {moment(note.created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
+        {:else}
+          loading...
+        {/if}
+      </div>
+      <div class="relative h-full pr-4 overflow-hidden text-sm leading-4 {expandNote ? 'expanded-note' : 'z-0'}">
+        {note.note}
+      </div>
     </div>
   </div>
 </div>
@@ -32,6 +37,10 @@
     color: #68D391;
     width: 16px;
     height: 16px;
+  }
+
+  .note-container {
+    position: relative;
   }
 
   .note {
@@ -49,7 +58,7 @@
   }
 
   .expanded {
-    @apply h-full;
+    @apply h-full z-30;
   }
 
   .expanded-note {

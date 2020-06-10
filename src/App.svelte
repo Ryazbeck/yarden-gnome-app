@@ -11,6 +11,7 @@
   // import "firebase/storage";
 
   import Tailwindcss from './Tailwindcss.svelte';
+  import 'bulma/css/bulma.css'
 
   let firebaseConfig = {
     apiKey: "AIzaSyCzha0sFqdty4ildyFuyR4qVCY4kjRel_w",
@@ -58,15 +59,6 @@
 
 <main>
 
-  {#if !firebaseConfig.projectId}
-    <strong>Step 0</strong>
-    Create a
-    <a href="https://firebase.google.com/">Firebase Project</a>
-    and paste your web config into
-    <code>App.svelte</code>
-    .
-  {/if}
-
   <!-- 1. 🔥 Firebase App -->
   <FirebaseApp {firebase}>
 
@@ -76,6 +68,9 @@
         <span class="text-2xl font-bold text-white">
           Smart Gardening
         </span>
+        <span class="my-auto font-bold text-white">
+          Zones
+        </span>
         <span class="flex justify-end">
           <span class="flex items-center text-sm font-semibold text-gray-100">{user.email}</span>
           <button class="p-1 ml-3 font-semibold text-gray-100 border-2 border-gray-100 shadow-sm hover:bg-red-400" on:click={() => authSignOut()}>Sign Out</button>
@@ -83,6 +78,9 @@
       </div>
 
       <Zones {user} />
+
+      <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
+      </div>
 
       <span slot="loading">Loading zones...</span>
 
