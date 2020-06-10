@@ -34,7 +34,7 @@
       <Tabs bind:value={tabIndex}>
         {#each zones as zone}
           <Tab label="{zone.name}">
-            <Zone {zone} {user} on:refreshTabs="{refreshTabs}" />
+            <Zone {zone} {zones} {user} on:refreshTabs="{refreshTabs}" />
           </Tab>
         {/each}
       </Tabs>

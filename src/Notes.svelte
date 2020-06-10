@@ -4,7 +4,7 @@
   import Note from "./Note.svelte";
   import { Modal } from 'svelma'
 
-  export let zone;
+  export let zoneRef;
 
   let addNote = false;
   let newNote;
@@ -22,7 +22,7 @@
 
   <div class="h-56 px-1 overflow-scroll overflow-x-hidden">
     <Collection
-      path={`${zone.ref.path}/notes`}
+      path={`${zoneRef.path}/notes`}
       query={ref => ref.orderBy('created', 'desc')}
       let:data={notes}
       let:ref={notesRef}

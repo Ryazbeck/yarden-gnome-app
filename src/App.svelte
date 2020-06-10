@@ -82,7 +82,7 @@
       <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
       </div>
 
-      <span slot="loading">Loading zones...</span>
+      <!-- <span slot="loading">Loading zones...</span> -->
 
       <div slot="signed-out">
         <button class="h-full p-2 font-semibold text-white bg-green-400 hover:bg-green-500" on:click={() => authPopup()}>
