@@ -10,6 +10,9 @@
   // import "firebase/messaging";
   // import "firebase/storage";
 
+  import FaUserCircle from 'svelte-icons/fa/FaUserCircle.svelte'
+  import { Button, Dialog, Toast } from 'svelma'
+
   import Tailwindcss from './Tailwindcss.svelte';
   import 'bulma/css/bulma.css'
 
@@ -55,6 +58,17 @@
       // An error happened.
     });
   }
+
+  function userModal(user) {
+    console.log(user)
+    return Dialog.confirm({
+      title: 'Logged in as:',
+      message: user.email,
+      confirmText: 'Logout',
+      size: 'is-small'
+    })
+    .then(result => result && authSignOut())
+  }
 </script>
 
 <main>
@@ -64,28 +78,24 @@
 
     <!-- 2. 😀 Get the current user -->
     <User let:user let:auth>
-      <div class="flex justify-between p-4 bg-green-400">
-        <span class="text-2xl font-bold text-white">
-          Smart Gardening
+      <div class="flex flex-row justify-between px-4 py-2">
+        <span class="text-xl font-bold text-left text-white">
+          Yarden Gnome
         </span>
-        <span class="my-auto font-bold text-white">
-          Zones
-        </span>
-        <span class="flex justify-end">
-          <span class="flex items-center text-sm font-semibold text-gray-100">{user.email}</span>
-          <button class="p-1 ml-3 font-semibold text-gray-100 border-2 border-gray-100 shadow-sm hover:bg-red-400" on:click={() => authSignOut()}>Sign Out</button>
+        <span on:click={() => userModal(user)} class="my-auto icon">
+          <FaUserCircle />
+          <!-- <span class="flex items-center justify-center text-xs font-semibold text-gray-100 md:text-sm">{user.email}</span>
+          <button class="w-16 p-1 mx-auto mt-1 text-xs font-semibold text-gray-100 bg-green-500 shadow-sm md:ml-3 md:w-auto hover:bg-red-400" on:click={() => authSignOut()}>Sign Out</button> -->
         </span>
       </div>
 
       <Zones {user} />
 
-      <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
-      </div>
-
-      <!-- <span slot="loading">Loading zones...</span> -->
+      <!-- <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
+      </div> -->
 
       <div slot="signed-out">
-        <button class="h-full p-2 font-semibold text-white bg-green-400 hover:bg-green-500" on:click={() => authPopup()}>
+        <button class="h-full p-2 font-semibold text-white bg-green-500 hover:bg-green-600" on:click={() => authPopup()}>
           Sign In With Google
         </button>
       </div>
@@ -112,6 +122,10 @@
   h1,
   em {
     color: #ff3e00;
+  }
+
+  .icon {
+    color: white;
   }
 
   hr {

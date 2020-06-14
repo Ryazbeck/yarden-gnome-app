@@ -1,7 +1,7 @@
 <script>
   import firebase from "firebase/app";
   import IoMdCloseCircle from 'svelte-icons/io/IoMdCloseCircle.svelte'
-  import { Button, Modal } from 'svelma'
+  import { Button, Modal, Collapse } from 'svelma'
 	import { tick } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -13,19 +13,47 @@
   let newCrops = null;
   let refreshing = false;
 
-  function refreshZone(tabIndex) {
-    dispatch('refreshZone', tabIndex);
-  }
-  
-  async function refreshCrops() {
+  async function refreshMe() {
     refreshing = true;
-    await tick();
-    refreshing = false;
-    crops = zoneDoc.crops;
+    setTimeout(() => {
+      refreshing = false;
+    }, 200)
   }
 </script>
 
-<div class="flex flex-col justify-start w-full h-auto p-2 text-sm bg-white border-2 border-gray-300 rounded-sm">
+
+<span class="w-full p-2 mt-2 font-bold text-left text-white bg-green-400 outline-none hover:bg-green-500">
+  Crops
+</span>
+<div class="px-4 mt-2 bg-white rounded">
+  <Button on:click={() => addCrops = !addCrops} class="my-2 font-bold text-white bg-green-300 is-small">
+    Add Crop
+  </Button>
+  <div class="p-2 content">
+    {#if crops}
+    {#if crops.length}
+      <ul>
+      {#each crops as crop}
+        <li class="flex justify-between p-1 px-2 mr-2 font-semibold text-white bg-green-500 border-2 border-green-600">
+          <span>{crop}</span>
+          <span class="my-auto align-middle cursor-pointer icon" on:click={() => {
+              zoneRef.update({
+                modified: firebase.firestore.FieldValue.serverTimestamp(),
+                crops: crops.filter(cropEl => cropEl != crop)
+              }).then(refreshMe())}}>
+            <IoMdCloseCircle />
+          </span>
+        </li>
+      {/each}
+      </ul>
+    {:else}
+      This zone has no crops
+    {/if}
+    {/if}
+  </div>
+</div>
+
+<!-- <div class="flex flex-col justify-start w-full h-auto p-2 text-sm bg-white border-2 border-gray-300 rounded-sm">
   <div class="flex flex-row justify-between w-auto mb-1 align-middle rounded-sm">
     <div class="p-1 font-semibold">
       Crops
@@ -38,25 +66,15 @@
     {#if crops}
       {#if crops.length}
         {#each crops as crop}
-          <span class="p-1 px-2 mr-2 font-semibold text-white bg-green-500 border-2 border-green-600 rounded-full">
-            {crop} 
-            <span class="align-middle cursor-pointer icon" on:click={() => {
-                zoneRef.update({
-                  modified: firebase.firestore.FieldValue.serverTimestamp(),
-                  crops: crops.filter(cropEl => cropEl != crop)
-              }).then(() => refreshZone())}}>
-              <IoMdCloseCircle />
-            </span>
-          </span>
         {/each}
       {:else}
         <span class="p-1 px-2 align-middle">
-          No crops created for this zone.
+          This zone has no crops assigned.
         </span>
       {/if}
     {/if}
   </div>
-</div>
+</div> -->
 
 <Modal bind:active={addCrops}>
   <div class="p-2 bg-white bg-green-100 border-4 border-green-400 rounded shadow">
@@ -66,7 +84,7 @@
       on:click={() => zoneRef.update({
         modified: firebase.firestore.FieldValue.serverTimestamp(),
         crops: crops ? crops.concat(newCrops.split(",")) : newCrops.split(/\s*,\s*/)
-    }).then(() => addCrops = !addCrops).then(() => refreshCrops())}>
+    }).then(() => addCrops = !addCrops).then(refreshMe())}>
       Save Note
     </button>
   </div>

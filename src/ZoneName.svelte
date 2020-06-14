@@ -3,34 +3,37 @@
   
   export let zoneDoc;
   export let zoneRef;
+  export let selectedValue;
+  
   let zoneNameUpdate;
   let editName = false;
 </script>
 
-
-<div class="flex flex-row items-center justify-between w-full h-auto px-4 py-2 text-xl font-bold text-white align-middle bg-green-500 border-t-2 border-green-300 rounded-t-sm">
+<!-- <img src="static/raised_planter.jpg" alt="zone" /> -->
+<div class="flex flex-row w-full h-auto py-2 pl-10 text-2xl font-semibold text-left text-yellow-200">
   {#if editName}
-    <input class="bg-green-500" bind:value={zoneDoc.name} />
+    <input class="w-auto h-full p-1 text-center" bind:value={zoneDoc.name} />
     <button class="ml-2 text-base" on:click={() => zoneRef.update({
       name: zoneDoc.name,
       modified: Date.now(),
-    }).then(() => editName=false)}>
+    }).then(() => editName=false)
+      .then(() => selectedValue=zoneDoc.name)
+    }>
       Save
     </button>
   {:else}
     <span>
       {zoneDoc.name}
     </span>
-    <span on:click={() => editName=true} class="ml-2 cursor-pointer icon">
+    <span on:click={() => editName=true} class="my-auto ml-2 cursor-pointer icon">
       <FaEdit />
     </span>
   {/if}
 </div>
 
-
 <style>
   .icon {
-    color: #F0FFF4;
+    color: #fffde8;
     width: 16px;
     height: 16px;
   }
