@@ -5,6 +5,6 @@ For interacting with the [Yarden Gnome sensors](https://github.com/Ryazbeck/smar
 Built with Firebase/Firestore, Svelte, TailwindCSS
 
 v.01 planned features
-* Threshold breaches
-* View current and historical sensor readings
-* Keep notes
+* Threshold breach alerting
+* Current and historical sensor readings
+* Notes
