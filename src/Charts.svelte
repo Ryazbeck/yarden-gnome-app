@@ -1,5 +1,4 @@
 <script>
-
   import Chart from 'svelte-frappe-charts';
 
   let data = {
@@ -15,22 +14,24 @@
       },
     ],
     yRegions: [{
-      label: "Moisture %",
-      start: 0,
-      end: 100
+      label: "Safe range",
+      start: 45,
+      end: 75,
+      color: 'green',
     }]
   };
 
-  // export let zoneDoc;
+  export let zoneDoc;
+  console.log(zoneDoc)
 </script>
 
-<div class="mt-4 text-sm font-semibold text-left text-white text-small">
-  Charts
+<div class="mb-1 text-xs font-bold text-left text-white">
+  History
 </div>
 
-<span class="w-1/2 mt-4 chart">
+<div class="mb-5 bg-white rounded-lg shadow-lg">
   <Chart data={data} type="line" />
-</span>
+</div>
 
 <style>
   .chart > div {

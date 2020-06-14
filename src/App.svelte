@@ -1,6 +1,6 @@
 <script>
   import { FirebaseApp, User, Doc, Collection } from "sveltefire";
-  import Zones from "./Zones.svelte"
+  import Dashboard from "./Dashboard.svelte"
 
   import firebase from "firebase/app";
   import "firebase/auth";
@@ -89,7 +89,9 @@
         </span>
       </div>
 
-      <Zones {user} />
+      <Dashboard {user} />
+
+      <!-- <Zones {user} /> -->
 
       <!-- <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
       </div> -->

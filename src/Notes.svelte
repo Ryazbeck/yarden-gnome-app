@@ -15,8 +15,13 @@
   let notesOpen = false;
 </script>
 
-<div class="mt-4 text-sm font-semibold text-left text-white text-small">
-  Notes
+<div class="mb-1 text-xs font-bold text-left text-white">
+  <span>
+    Notes
+  </span>
+  <span class="float-right cursor-pointer" on:click={() => addNote = !addNote}>
+    Add note
+  </span>
 </div>
 
 <Collection
@@ -26,28 +31,15 @@
   let:ref={notesRef}
   log>
 
-  <Collapse bind:open={notesOpen}>
-    <div class="flex flex-row justify-start w-full p-2 font-bold text-left bg-white rounded-lg shadow-lg is-primary" slot="trigger">
-      <span class="w-3 my-auto mr-1">
-        {#if notesOpen}
-          <FaMinus />
-        {:else}
-          <FaPlus />
-        {/if}
-      </span>
-      <span class="h-full my-auto">
-        {notesOpen ? 'collapse' : 'expand'}
-      </span>
-    </div>
     <div class="flex flex-col justify-start">
-      <div class="flex flex-col {notes.length ? 'h-56' : 'h-12'} my-2 overflow-y-scroll md:pr-2 content">
+      <div class="flex flex-col h-56 overflow-y-scroll md:pr-2 content">
         {#if notes.length}
           <ul class="mt-0 ml-0">
             {#each notes as note}
               <li>
                 <span>
                 {#if note.created}
-                  <span class="flex flex-col justify-start text-left bg-white border-l-2 border-yellow-600 rounded-lg shadow-lg">
+                  <span class="flex flex-col justify-start p-1 text-left bg-white border-l-2 border-yellow-600 rounded-lg shadow-lg">
                     <div class="flex justify-between px-1 text-xs text-gray-600">
                       <span>
                         {moment(note.created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
@@ -72,13 +64,7 @@
           </div>
         {/if}
       </div>
-      <div class="flex justify-end">
-        <Button on:click={() => addNote = !addNote} class="font-bold text-white bg-green-300 is-small">
-          Add Note
-        </Button>
-      </div>
     </div>
-  </Collapse>
 
   <!-- create new note -->
   <Modal bind:active={addNote}>
