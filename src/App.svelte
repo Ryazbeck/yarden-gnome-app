@@ -12,6 +12,7 @@
 
   import FaUserCircle from 'svelte-icons/fa/FaUserCircle.svelte'
   import { Button, Dialog, Toast } from 'svelma'
+  import { afterUpdate } from 'svelte'
 
   import Tailwindcss from './Tailwindcss.svelte';
   import 'bulma/css/bulma.css'
@@ -77,7 +78,7 @@
   <FirebaseApp {firebase}>
 
     <!-- 2. 😀 Get the current user -->
-    <User let:user let:auth>
+    <User persist={sessionStorage} let:user let:auth>
       <div class="flex flex-row justify-between px-4 py-2">
         <span class="text-xl font-bold text-left text-white">
           Yarden Gnome
@@ -96,15 +97,21 @@
       <!-- <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
       </div> -->
 
-      <div slot="signed-out">
-        <button class="h-full p-2 font-semibold text-white bg-green-500 hover:bg-green-600" on:click={() => authPopup()}>
-          Sign In With Google
+      <div class="flex flex-col justify-center h-screen" slot="signed-out">
+        <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-green-600" on:click={() => authPopup()}>
+          Sign In with Google
         </button>
+        <!-- <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-green-600" on:click={() => authPopup()}>
+          Sign Up or Sign In with Email
+        </button> -->
       </div>
 
     </User>
   </FirebaseApp>
 
+  {#if false}
+    <Dialog />
+  {/if}
   <Tailwindcss />
 </main>
 

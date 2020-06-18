@@ -25,7 +25,8 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			preprocess: sveltePreprocess({ postcss: true })
+			preprocess: sveltePreprocess({ postcss: true }),
+			// customElement: true
 		}),
 		
     postcss(),

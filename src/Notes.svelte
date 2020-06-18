@@ -15,11 +15,11 @@
   let notesOpen = false;
 </script>
 
-<div class="mb-1 text-xs font-bold text-left text-white">
-  <span>
+<div class="mb-1 font-bold text-left text-white">
+  <span class="text-sm md:text-base">
     Notes
   </span>
-  <span class="float-right cursor-pointer" on:click={() => addNote = !addNote}>
+  <span class="float-right text-xs cursor-pointer md:text-sm" on:click={() => addNote = !addNote}>
     Add note
   </span>
 </div>
@@ -68,7 +68,7 @@
 
   <!-- create new note -->
   <Modal bind:active={addNote}>
-    <div class="p-2 bg-green-100 border-4 border-green-400 shadow">
+    <div class="p-2 mx-2 bg-green-100 border-4 border-green-400 shadow md:mx-0">
       Note:
       <textarea class="w-full h-20 p-1" bind:value={newNote} />
       <button class="p-1 mr-2 text-sm font-semibold text-white bg-blue-400 cursor-pointer hover:bg-blue-500" 

@@ -1,5 +1,4 @@
 <script>
-  import firebase from "firebase/app";
   import { Doc } from "sveltefire";
   import Alerts from './Alerts.svelte'
   import Sensors from './Sensors.svelte'
@@ -19,8 +18,7 @@
     >
 
     <!-- <Alerts {zoneDoc} {user} /> -->
-    <Sensors {zoneDoc} {zoneRef} {user} />
-    <Charts {zoneDoc} />
+    <Sensors {zoneRef} {user} />
     <Notes {zoneRef}  />
 
   </Doc>
