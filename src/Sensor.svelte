@@ -1,5 +1,6 @@
 <script>
   import moment from 'moment';
+  import { Doc, Collection } from "sveltefire";
   import IoIosWater from 'svelte-icons/io/IoIosWater.svelte'
   import IoIosSunny from 'svelte-icons/io/IoIosSunny.svelte'
 
@@ -19,13 +20,23 @@
   }
 
   export let sensor;
-  export let moistures;
-  let sensorMoistures = moistures.filter(moisture => moisture.sensorId == sensor.ref.id)
-  let lastMoisture = sensorMoistures[sensorMoistures.length-1];
+  export let user;
+  export let zoneRef;
+  // export let moistures;
+  // let sensorMoistures = moistures.filter(moisture => moisture.sensorId == sensor.ref.id)
+  // let lastMoisture = sensorMoistures[sensorMoistures.length-1];
 </script>
 
-<div class="flex flex-row justify-center mb-0 bg-white rounded-lg shadow-lg md:w-5/12 sensor">
-    <div class="w-1/5 p-4 fill-current {iconColor[sensor.sensorType](lastMoisture.value, sensor)}">
+<Collection
+  path={'moisture'}
+  query={ref => ref.where('created', '>', moment().subtract(4,'h').toDate()).where('userId', '==', user.uid)
+    .where('zoneId', '==', zoneRef.id).where('sensorId', '==', sensor.ref.id).orderBy('created', 'desc').limit(1)}
+  let:data={moisture}
+  let:ref={moisturesRef}
+  log>
+
+  <div class="flex flex-row justify-center mb-0 bg-white rounded-lg shadow-lg md:w-5/12 sensor">
+    <div class="w-1/5 p-4 fill-current {iconColor[sensor.sensorType](moisture[0].value, sensor)}">
         <svelte:component this={iconComponents[sensor.sensorType]} />
     </div>
     <div class="w-3/5 h-auto py-3 my-auto text-xs leading-snug">
@@ -36,15 +47,17 @@
         {sensor.sensorType}
     </div>
     <div class="text-left">
-        {moment(lastMoisture.created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
+        {moment(moisture[0].created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
     </div>
     </div>
     <div class="flex w-1/5 text-2xl font-thin text-center align-middle">
     <div class="m-auto">
-        {lastMoisture.value}%
+        {moisture[0].value}%
     </div>
     </div>
-</div>
+  </div>
+
+</Collection>
 
 <style>
   .sensor-icon {

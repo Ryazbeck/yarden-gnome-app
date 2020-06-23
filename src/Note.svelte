@@ -47,16 +47,6 @@
     position: relative;
   }
 
-  .note:after {
-    content: "";
-    position: absolute;
-    top: 0; bottom: 0; left: 0; right:0;
-    z-index: 20;
-    -webkit-box-shadow: inset 0px -20px 8px -10px rgba(255,255,255,1);
-    -moz-box-shadow: inset 0px -20px 8px -10px rgba(255,255,255,1);
-    box-shadow: inset 0px -20px 8px -10px rgba(255,255,255,1);
-  }
-
   .expanded {
     @apply h-full z-30;
   }

@@ -19,7 +19,7 @@
   <span class="text-sm md:text-base">
     Notes
   </span>
-  <span class="float-right text-xs cursor-pointer md:text-sm" on:click={() => addNote = !addNote}>
+  <span class="float-right text-xs cursor-pointer md:text-sm hover:text-blue-300" on:click={() => addNote = !addNote}>
     Add note
   </span>
 </div>
@@ -32,7 +32,7 @@
   log>
 
     <div class="flex flex-col justify-start">
-      <div class="flex flex-col h-56 overflow-y-scroll md:pr-2 content">
+      <div class="flex flex-col h-56 overflow-y-scroll md:pr-2">
         {#if notes.length}
           <ul class="mt-0 ml-0">
             {#each notes as note}
@@ -44,7 +44,7 @@
                       <span>
                         {moment(note.created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
                       </span>
-                      <span on:click={() => note.ref.delete()}>
+                      <span on:click={() => note.ref.delete()} class="cursor-pointer hover:text-blue-300">
                         delete
                       </span>
                     </div>
@@ -71,7 +71,7 @@
     <div class="p-2 mx-2 bg-green-100 border-4 border-green-400 shadow md:mx-0">
       Note:
       <textarea class="w-full h-20 p-1" bind:value={newNote} />
-      <button class="p-1 mr-2 text-sm font-semibold text-white bg-blue-400 cursor-pointer hover:bg-blue-500" 
+      <button class="p-1 mr-2 text-sm font-semibold text-white bg-blue-400 cursor-pointer hover:bg-blue-300" 
         on:click={() => notesRef.add({
           created: firebase.firestore.FieldValue.serverTimestamp(),
           note: newNote
@@ -88,6 +88,10 @@
     color: #525252;
     width: 10px;
     height: 10px;
+  }
+
+  li:not(:last-child) {
+    @apply mb-3;
   }
 
   * {

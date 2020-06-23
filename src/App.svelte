@@ -1,5 +1,7 @@
 <script>
+  
   import { FirebaseApp, User, Doc, Collection } from "sveltefire";
+  import Nav from "./Nav.svelte"
   import Dashboard from "./Dashboard.svelte"
 
   import firebase from "firebase/app";
@@ -10,12 +12,8 @@
   // import "firebase/messaging";
   // import "firebase/storage";
 
-  import FaUserCircle from 'svelte-icons/fa/FaUserCircle.svelte'
-  import { Button, Dialog, Toast } from 'svelma'
-  import { afterUpdate } from 'svelte'
-
   import Tailwindcss from './Tailwindcss.svelte';
-  import 'bulma/css/bulma.css'
+  import '@fortawesome/fontawesome-free/css/all.css'
 
   let firebaseConfig = {
     apiKey: "AIzaSyCzha0sFqdty4ildyFuyR4qVCY4kjRel_w",
@@ -59,17 +57,6 @@
       // An error happened.
     });
   }
-
-  function userModal(user) {
-    console.log(user)
-    return Dialog.confirm({
-      title: 'Logged in as:',
-      message: user.email,
-      confirmText: 'Logout',
-      size: 'is-small'
-    })
-    .then(result => result && authSignOut())
-  }
 </script>
 
 <main>
@@ -79,26 +66,13 @@
 
     <!-- 2. 😀 Get the current user -->
     <User persist={sessionStorage} let:user let:auth>
-      <div class="flex flex-row justify-between px-4 py-2">
-        <span class="text-xl font-bold text-left text-white">
-          Yarden Gnome
-        </span>
-        <span on:click={() => userModal(user)} class="my-auto icon">
-          <FaUserCircle />
-          <!-- <span class="flex items-center justify-center text-xs font-semibold text-gray-100 md:text-sm">{user.email}</span>
-          <button class="w-16 p-1 mx-auto mt-1 text-xs font-semibold text-gray-100 bg-green-500 shadow-sm md:ml-3 md:w-auto hover:bg-red-400" on:click={() => authSignOut()}>Sign Out</button> -->
-        </span>
-      </div>
+
+      <Nav {user} />
 
       <Dashboard {user} />
 
-      <!-- <Zones {user} /> -->
-
-      <!-- <div class="h-10 max-w-screen-md mx-auto font-bold text-center text-white align-middle bg-green-200 border-2 border-b-0 border-green-400 rounded-t">
-      </div> -->
-
       <div class="flex flex-col justify-center h-screen" slot="signed-out">
-        <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-green-600" on:click={() => authPopup()}>
+        <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-blue-300" on:click={() => authPopup()}>
           Sign In with Google
         </button>
         <!-- <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-green-600" on:click={() => authPopup()}>
@@ -108,10 +82,7 @@
 
     </User>
   </FirebaseApp>
-
-  {#if false}
-    <Dialog />
-  {/if}
+  
   <Tailwindcss />
 </main>
 
@@ -131,10 +102,6 @@
   h1,
   em {
     color: #ff3e00;
-  }
-
-  .icon {
-    color: white;
   }
 
   hr {

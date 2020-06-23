@@ -1,12 +1,24 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function userOwnsZone(zoneId) {
+    	// Verify that user owns the zone associated with the document
+      return get(/databases/$(database)/documents/zones/$(zoneId)).data.userId == request.auth.uid;
+    }
+    
+  	match /moisture/{value} {
+      allow read: if userOwnsZone(resource.data.zoneId);
+    }
+    
+  	match /sensors/{value} {
+      allow read, update: if userOwnsZone(resource.data.zoneId);
+    }
+    
     match /zones/{zone} {
-      allow read, write, update: if request.auth.uid == resource.data.userId;
-      allow create: if request.auth.uid != null;
+      allow read, write, update, create, delete: if request.auth.uid == resource.data.userId; 
+      
       match /notes/{note} {
-      	// Confirm the parent zone's userId matches the request.
-      	allow read, write, update, create: if get(/databases/$(database)/documents/zones/$(zone)).data.userId == request.auth.uid;
+      	allow read, write, update, create: if userOwnsZone(zone);
       }
     }
   }

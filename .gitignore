@@ -3,3 +3,6 @@ node_modules
 public/build
 smart-gardening.json
 .unused
+firestore*
+storage.rules
+functions/
