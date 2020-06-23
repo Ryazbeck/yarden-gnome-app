@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import postcss from 'rollup-plugin-postcss'
+import sizes from 'rollup-plugin-sizes';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -22,11 +23,10 @@ export default {
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file — better for performance
+			preprocess: sveltePreprocess({ postcss: true }),
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			preprocess: sveltePreprocess({ postcss: true }),
-			// customElement: true
 		}),
 		
     postcss(),
@@ -53,7 +53,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		sizes(true)
 	],
 	watch: {
 		clearScreen: false

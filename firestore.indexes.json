@@ -41,6 +41,46 @@
       ]
     },
     {
+      "collectionGroup": "moisture",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "sensorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "zoneId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "moisture",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "zoneId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "zones",
       "queryScope": "COLLECTION",
       "fields": [
