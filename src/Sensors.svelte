@@ -4,46 +4,25 @@
   import Chart from 'svelte-frappe-charts';
   import { onMount } from 'svelte';
   import { Doc, Collection } from "sveltefire";
+  import IoIosWater from 'svelte-icons/io/IoIosWater.svelte'
+  import IoIosSunny from 'svelte-icons/io/IoIosSunny.svelte'
 
-  import Sensor from './Sensor.svelte'
-  function parseMoisture(moistures, sensors) {
-    return {
-      labels: moistures.filter(v => v.sensorId == sensors[0].ref.id).map(v => moment(v.created.toDate()).format('LTS')),
-      datasets: sensors.map(snsr => {
-        return {
-          name: snsr.name,
-          chartType: 'line',
-          values: moistures.filter(v => v.sensorId == snsr.ref.id).map(v => v.value)
-        }
-      }),
-      yRegions: [{
-        label: "Moisture range",
-        start: 45,
-        end: 80,
-        options: {
-          labelPos: 'left'
-        }
-      }],
-    }
+  let operators = {
+    '<': function(a, b) { return a < b },
+    '>': function(a, b) { return a > b }
   }
 
-  let props = {
-    colors: ['light-blue', 'yellow', 'purple'],
-    axisOptions: {
-      xAxisMode: "tick",
-      xIsSeries: true
-    },
-    tooltipOptions: {
-      formatTooltipX: d => (d + '').toUpperCase(),
-      formatTooltipY: d => d + '%',
-    }
+  let iconComponents = {
+    "moisture": IoIosWater,
+    "sunlight": IoIosSunny
   }
 
-  function getCreatedTime() {
-    return moment().subtract(4,'h').toDate()
+  const iconColor = {
+    "moisture": (value, sensor) => operators[sensor.thresholdType](value, sensor.threshold) ? 'text-red-400' : 'text-blue-300',
+    "sunlight": (value, sensor) => operators[sensor.thresholdType](value, sensor.threshold) ? 'text-gray-300' : 'text-yellow-500',
   }
 
-  export let zoneRef;
+  export let sensors;
   export let user;
 </script>
 
@@ -51,43 +30,45 @@
   Sensors
 </div>
 
-<div class="md:flex md:flex-col md:justify-start">
-  <Collection
-    path={`sensors`}
-    query={ref => ref.where('userId', '==', user.uid)
-      .where('zoneId', '==', zoneRef.id).where('enabled', '==', true)}
-    let:data={sensors}
-    let:ref={sensorsRef}
-    log>
+<div class="flex flex-col justify-start mb-4 md:flex-row md:justify-between">
+  {#if sensors.length}
+    {#each sensors as sensor}
+      <Collection
+        path={'sensor-readings'}
+        query={ref => ref.where('userId', '==', user.uid).where('sensorId', '==', sensor.ref.id).orderBy('created', 'desc').limit(1)}
+        let:data={sensorReadings}
+        let:ref={sensorReadingsRef}
+        log>
 
-    <Collection
-      path={'moisture'}
-      query={ref => ref.where('created', '>', getCreatedTime()).where('userId', '==', user.uid)
-        .where('zoneId', '==', zoneRef.id).orderBy('created')}
-      let:data={moistures}
-      let:ref={moisturesRef}
-      log>
+          <div class="flex flex-row justify-center mb-0 bg-white rounded-lg shadow-lg md:w-5/12 sensor">
+            <div class="w-1/5 p-4 fill-current {iconColor[sensor.sensorType](sensorReadings[0].value, sensor)}">
+                <svelte:component this={iconComponents[sensor.sensorType]} />
+            </div>
+            <div class="w-3/5 h-auto py-3 my-auto text-xs leading-snug">
+            <div class="font-bold text-left capitalize">
+                {sensor.name}
+            </div>
+            <div class="text-left capitalize">
+                {sensor.sensorType}
+            </div>
+            <div class="text-left">
+                {moment(sensorReadings[0].created.toDate()).format("MMMM Do YYYY, h:mm:ss a")}
+            </div>
+            </div>
+            <div class="flex w-1/5 text-2xl font-thin text-center align-middle">
+            <div class="m-auto">
+                {sensorReadings[0].value}%
+            </div>
+            </div>
+          </div>
 
-      <div class="flex flex-col justify-start mb-4 md:flex-row md:justify-between">
-        {#each sensors as sensor}
-          <Sensor {user} {zoneRef} {sensor} />
-        {/each}
-      </div>
-      
-      <div class="mb-4">
-        <div class="mb-1 text-sm font-bold text-left text-white md:text-base">
-          History
-        </div>
-
-        <div class="bg-white rounded-lg shadow-lg">
-          <Chart data={parseMoisture(moistures, sensors)} {...props} />
-        </div>
-      </div>
-
-    </Collection>
-
-
-  </Collection>
+      </Collection>
+    {/each}
+  {:else}
+    <div class="py-1 pl-2 my-auto text-xs font-bold text-left bg-white border-l-2 border-yellow-600 rounded-lg shadow-lg">
+      There are no sensors associated with your account.
+    </div>
+  {/if}
 </div>
 
 <style>

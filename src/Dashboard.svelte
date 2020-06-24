@@ -1,5 +1,5 @@
 <script>
-  import { Doc } from "sveltefire";
+  import { Doc, Collection } from "sveltefire";
   import Alerts from './Alerts.svelte'
   import Sensors from './Sensors.svelte'
   import Charts from './Charts.svelte'
@@ -12,15 +12,23 @@
 </script>
 
 <div class="container max-w-screen-md p-3 mx-auto">
-  <Doc 
-    path={`zones/o7xjEbtq1Km1dcNpo2ys`} 
-    let:data={zoneDoc} 
-    let:ref={zoneRef}
-    >
 
-    <!-- <Alerts {zoneDoc} {user} /> -->
-    <Sensors {zoneRef} {user} />
-    <Notes {zoneRef}  />
 
-  </Doc>
+  <div class="md:flex md:flex-col md:justify-start">
+    <Collection
+      path={`sensors`}
+      query={ref => ref.where('userId', '==', user.uid).where('enabled', '==', true)}
+      let:data={sensors}
+      let:ref={sensorsRef}
+      log>
+
+      <Sensors {user} {sensors} />
+
+      <Charts {user} {sensors} />
+
+    </Collection>
+  </div>
+
+  <Notes {user} />
+
 </div>

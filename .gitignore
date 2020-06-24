@@ -1,8 +1,9 @@
 .DS_Store
 node_modules
 public/build
-smart-gardening.json
-.unused
+.firebase*
+firebase*
 firestore*
 storage.rules
 functions/
+notes*

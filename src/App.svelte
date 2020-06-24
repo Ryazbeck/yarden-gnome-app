@@ -15,20 +15,21 @@
   import Tailwindcss from './Tailwindcss.svelte';
   import '@fortawesome/fontawesome-free/css/all.css'
 
-  let firebaseConfig = {
-    apiKey: "AIzaSyCzha0sFqdty4ildyFuyR4qVCY4kjRel_w",
-    authDomain: "smart-gardening-2a1fe.firebaseapp.com",
-    databaseURL: "https://smart-gardening-2a1fe.firebaseio.com",
-    projectId: "smart-gardening-2a1fe",
-    storageBucket: "smart-gardening-2a1fe.appspot.com",
-    messagingSenderId: "867533415028",
-    appId: "1:867533415028:web:28b243b76f3bdb1c1e6721",
-    measurementId: "G-V6R8ZQT946"
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeuvFfpE-R2t_hjM533s0mBq0D6E4JXz0",
+    authDomain: "yardengnome.firebaseapp.com",
+    databaseURL: "https://yardengnome.firebaseio.com",
+    projectId: "yardengnome",
+    storageBucket: "yardengnome.appspot.com",
+    messagingSenderId: "719452905990",
+    appId: "1:719452905990:web:c18875be7253106854d987",
+    measurementId: "G-7EGCYS2RSP"
   };
 
   firebase.initializeApp(firebaseConfig);
 
   let userId;
+  let sessionStorage;
 
   var provider = new firebase.auth.GoogleAuthProvider();
   function authPopup() {
@@ -59,12 +60,14 @@
   }
 </script>
 
+
+
 <main>
 
-  <!-- 1. 🔥 Firebase App -->
+  <!-- Firebase App -->
   <FirebaseApp {firebase}>
 
-    <!-- 2. 😀 Get the current user -->
+    <!-- Get the current user -->
     <User persist={sessionStorage} let:user let:auth>
 
       <Nav {user} />
@@ -75,19 +78,16 @@
         <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-blue-300" on:click={() => authPopup()}>
           Sign In with Google
         </button>
-        <!-- <button class="p-2 mx-auto font-semibold text-white bg-green-500 button hover:bg-green-600" on:click={() => authPopup()}>
-          Sign Up or Sign In with Email
-        </button> -->
       </div>
 
     </User>
   </FirebaseApp>
   
   <Tailwindcss />
+
 </main>
 
 
-<!-- Styles -->
 <style>
   * {
     transition: .2s;

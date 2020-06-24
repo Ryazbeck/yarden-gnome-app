@@ -8,8 +8,7 @@
   import FaPlus from 'svelte-icons/fa/FaPlus.svelte'
   import FaMinus from 'svelte-icons/fa/FaMinus.svelte'
 
-  export let zoneRef;
-
+  export let user;
   let addNote = false;
   let newNote;
   let notesOpen = false;
@@ -25,14 +24,14 @@
 </div>
 
 <Collection
-  path={`${zoneRef.path}/notes`}
-  query={ref => ref.orderBy('created', 'desc')}
+  path={`notes/`}
+  query={ref => ref.where('userId', '==', user.uid).orderBy('created', 'desc')}
   let:data={notes}
   let:ref={notesRef}
   log>
 
     <div class="flex flex-col justify-start">
-      <div class="flex flex-col h-56 overflow-y-scroll md:pr-2">
+      <div class="flex flex-col h-auto overflow-y-scroll md:pr-2">
         {#if notes.length}
           <ul class="mt-0 ml-0">
             {#each notes as note}
@@ -59,8 +58,8 @@
             {/each}
           </ul>
         {:else}
-          <div class="my-auto text-base">
-            No Notes...
+          <div class="py-1 pl-2 my-auto mb-4 text-xs font-bold text-left bg-white border-l-2 border-yellow-600 rounded-lg shadow-lg">
+            Click 'add note' to create a note
           </div>
         {/if}
       </div>
