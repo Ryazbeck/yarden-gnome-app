@@ -11,7 +11,7 @@
     "@google-cloud/firestore": "^3.8.5",
     "firebase": "^7.15.0",
     "node-sass": "^7.0.0",
-    "postcss": "^7.0.32",
+    "postcss": "^7.0.36",
     "postcss-load-config": "^2.1.0",
     "rollup": "^1.32.1",
     "rollup-plugin-alias": "^2.2.0",
